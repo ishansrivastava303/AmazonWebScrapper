@@ -2,7 +2,7 @@ package main
 
 import (
     //"fmt"
-    b "AmazonProject/writeJSON"
+    b "AmazonProject/DBStore"
     "log"
     "net/http"
     //"os"
@@ -41,7 +41,7 @@ var price [] string
 
 func main() {
     
-    url:="https://www.amazon.com/Nintendo-Switch-Gray-Joy%E2%80%91-HAC-001/dp/B07VJRZ62R/ref=pd_sim_nf_6?pd_rd_w=DuCMb&pf_rd_p=90765e8c-a52e-4c61-b338-0577ef37d819&pf_rd_r=K2K9FZBQZVVB2CGD6A96&pd_rd_r=63832bcf-fce5-407d-92d8-4aec92b7b470&pd_rd_wg=06OJt&pd_rd_i=B07VJRZ62R&psc=1"    
+    url:="https://www.amazon.com/PlayStation-4-Pro-1TB-Console/dp/B01LOP8EZC/?th=1"    
     response, err := http.Get(url)
     if err != nil {
         log.Fatal(err)
