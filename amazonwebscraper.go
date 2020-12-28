@@ -1,16 +1,17 @@
 package main
 
 import (
-    //"fmt"
-    b "AmazonProject/DBStore"
+    "fmt"
+    //b "AmazonProject/DBStore"
     "log"
     "net/http"
     //"os"
     "strings"
+    "time"
     "github.com/PuerkitoBio/goquery"
     "encoding/json"
-    //"database/sql"
-    //_ "github.com/mattn/go-sqlite3"
+    "database/sql"
+    _ "github.com/mattn/go-sqlite3"
     //_ "github.com/go-sql-driver/mysql"
     //"io/ioutil"
     //"github.com/gocolly/colly"
@@ -133,8 +134,36 @@ func main() {
     //enc.Encode(allFacts)
     s,_:=json.MarshalIndent(product,""," ")
     //log.Println(string(b))
-    b.DbStore(string(s),fact.Name)
+    //b.DbStore(string(s),fact.Name)
     
+    timestamp:=time.Now().Format("01-02-2006 15:04:05")
+    
+    database,err:=sql.Open("sqlite3","./DBStore/ProductDetails.db")
+
+    if err!=nil{
+        fmt.Println("not able to connect to db server")
+    }    
+    
+    defer database.Close()
+
+    fmt.Println("Connected successfully")
+    
+    
+    statement,_:=database.Prepare("CREATE TABLE IF NOT EXISTS WEBSCRAPER(PRODUCT_NAME TEXT PRIMARY KEY,PRODUCT_DETAILS_JSON TEXT,TIMESTAMP TEXT)")       
+    
+    if err!=nil{
+        panic(err.Error())
+    }    
+    statement.Exec()    
+    
+    fmt.Println("WEBSCRAPER TABLE CREATED")
+    statement,err=database.Prepare("INSERT INTO WEBSCRAPER(PRODUCT_NAME,PRODUCT_DETAILS_JSON,TIMESTAMP) VALUES(?,?,?)")
+    
+    if err!=nil{
+        panic(err.Error())
+    }    
+    statement.Exec(fact.Name,string(s),timestamp)
+
     
     
 }
